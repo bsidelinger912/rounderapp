@@ -1,0 +1,9 @@
+{
+  "name": "rounder",
+  "private": true,
+  "workspaces": [
+    "rounder-client",
+    "rounder-types"
+  ],
+  "license": "MIT"
+}
