@@ -14,7 +14,7 @@ export default function App() {
          longitudeDelta: 0.0121,
        }}
      >
-     </MapView>
+    </MapView>
    </View>
   );
 }
