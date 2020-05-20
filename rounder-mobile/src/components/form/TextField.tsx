@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     height: 40,
     padding: 10,
-    marginBottom: 20,
+    marginBottom: 5,
     width: '100%',
   },
   error: {
@@ -38,19 +38,22 @@ const styles = StyleSheet.create({
   },
 });
 
-const TextField: React.FC<Props> = ({ placeholder, name }) => {
+const TextField: React.FC<Props> = ({
+  placeholder, name, password, label,
+}) => {
   const {
     values, onChange, onBlur, errors, touched,
   } = useContext(Context);
 
   return (
     <View style={styles.inputWrapper}>
-      <Text style={styles.inputLabel}>Email:</Text>
+      <Text style={styles.inputLabel}>{label}</Text>
       <TextInput
         onChangeText={onChange(name)}
         onBlur={onBlur(name)}
         value={values[name] as string}
         placeholder={placeholder}
+        secureTextEntry={password}
         style={styles.input}
       />
       <Text style={styles.error}>{touched[name] && errors[name]}</Text>

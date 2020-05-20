@@ -5,7 +5,9 @@
 
 import React, { createContext, PropsWithChildren } from 'react';
 import { Formik, FormikTouched } from 'formik';
-import { TouchableWithoutFeedback, Keyboard } from 'react-native';
+import {
+  TouchableWithoutFeedback, Keyboard, View, StyleSheet,
+} from 'react-native';
 
 export type Validation<Values> = {
   [P in keyof Values]?: string;
@@ -28,38 +30,46 @@ export interface FormContext {
 
 export const Context = createContext<FormContext>({} as any);
 
+const styles = StyleSheet.create({
+  childrenWrapper: {
+    width: '100%',
+  },
+});
+
 const Form = <Values, >({
   initialValues,
   validate,
   onSubmit,
   children,
 }: PropsWithChildren<Props<Values>>): JSX.Element => (
-  <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-    <Formik
-      initialValues={initialValues}
-      onSubmit={onSubmit}
-      validate={validate}
-    >
-      {({
-        handleChange, handleBlur, handleSubmit, values, errors, touched,
-      }): JSX.Element => {
-        const value: FormContext = {
-          onChange: (name: string) => handleChange(name),
-          onBlur: (name: string) => handleBlur(name),
-          handleSubmit,
-          values: values as any,
-          errors: errors as any,
-          touched,
-        };
+  <Formik
+    initialValues={initialValues}
+    onSubmit={onSubmit}
+    validate={validate}
+  >
+    {({
+      handleChange, handleBlur, handleSubmit, values, errors, touched,
+    }): JSX.Element => {
+      const value: FormContext = {
+        onChange: (name: string) => handleChange(name),
+        onBlur: (name: string) => handleBlur(name),
+        handleSubmit,
+        values: values as any,
+        errors: errors as any,
+        touched,
+      };
 
-        return (
-          <Context.Provider value={value}>
-            {children}
-          </Context.Provider>
-        );
-      }}
-    </Formik>
-  </TouchableWithoutFeedback>
+      return (
+        <Context.Provider value={value}>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.childrenWrapper}>
+              {children}
+            </View>
+          </TouchableWithoutFeedback>
+        </Context.Provider>
+      );
+    }}
+  </Formik>
   );
 
 export default Form;
