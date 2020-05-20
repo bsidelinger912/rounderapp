@@ -2,6 +2,9 @@
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint"],
   "extends": ["airbnb", "plugin:@typescript-eslint/recommended"],
+  "env": {
+    "browser": true
+  },
   "settings": {
     "import/extensions": [".js",".jsx",".ts",".tsx"],
     "import/parsers": {
@@ -15,6 +18,7 @@
   },
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".jsx"] }],
-    "import/extensions": [0, "never"]
+    "import/extensions": [0, "never"],
+    "react/prop-types": "off"
   }
 }
