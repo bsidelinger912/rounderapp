@@ -5,10 +5,11 @@
 
 import React from 'react';
 import {
-  StyleSheet, Text, KeyboardAvoidingView, Platform,
+  StyleSheet, KeyboardAvoidingView, Platform,
 } from 'react-native';
 
 import Tabs from '../../components/Tabs';
+import { mainPadding, topSpacing } from '../../spacing';
 
 import Login from './Login';
 import Signup from './Signup';
@@ -17,10 +18,8 @@ const styles = StyleSheet.create({
   container: {
     height: '100%',
     width: '100%',
-    // justifyContent: 'flex-start',
-    // alignItems: 'flex-start',
-    padding: 15,
-    paddingTop: 80,
+    padding: mainPadding,
+    paddingTop: topSpacing,
   },
 });
 

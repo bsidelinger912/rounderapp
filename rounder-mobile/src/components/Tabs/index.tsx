@@ -3,10 +3,13 @@
  * @description A tabs component
  */
 
-import React, { useState, useContext, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Text, View, StyleSheet, TouchableOpacity,
 } from 'react-native';
+
+import { borderGrey, greyHighlight, appBg } from '../../colors';
+import { borderRadius, tapablePadding } from '../../spacing';
 
 interface Tab {
   label: string;
@@ -24,21 +27,21 @@ const styles = StyleSheet.create({
   tabsWrapper: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: '#333',
+    borderBottomColor: borderGrey,
   },
   tab: {
-    padding: 10,
-    borderColor: '#333',
+    padding: tapablePadding,
+    borderColor: borderGrey,
     borderWidth: 1,
     borderBottomWidth: 0,
-    borderTopLeftRadius: 3,
-    borderTopRightRadius: 3,
-    backgroundColor: '#eee',
+    borderTopLeftRadius: borderRadius,
+    borderTopRightRadius: borderRadius,
+    backgroundColor: greyHighlight,
     marginRight: 5,
     position: 'relative',
   },
   activeTab: {
-    backgroundColor: '#fff',
+    backgroundColor: appBg,
     top: 1,
   },
   tabsContent: {

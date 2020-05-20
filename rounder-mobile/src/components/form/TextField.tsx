@@ -8,6 +8,8 @@ import {
   Text, StyleSheet, View, TextInput,
 } from 'react-native';
 
+import { borderLightGrey } from '../../colors';
+
 import { Context } from './Form';
 
 export interface Props {
@@ -25,7 +27,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   input: {
-    borderColor: '#ddd',
+    borderColor: borderLightGrey,
     borderWidth: 1,
     height: 40,
     padding: 10,

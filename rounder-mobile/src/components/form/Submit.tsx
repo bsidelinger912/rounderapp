@@ -6,15 +6,17 @@
 import React, { useContext } from 'react';
 import { Button, StyleSheet, View } from 'react-native';
 
+import { borderBlue, greyHighlight } from '../../colors';
+
 import { Context } from './Form';
 
 const styles = StyleSheet.create({
   buttonWrapper: {
     borderWidth: 1,
-    borderColor: '#339FFF',
+    borderColor: borderBlue,
     borderRadius: 3,
     padding: 10,
-    backgroundColor: '#eee',
+    backgroundColor: greyHighlight,
   },
 });
 

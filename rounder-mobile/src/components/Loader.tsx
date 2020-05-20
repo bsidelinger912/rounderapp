@@ -5,8 +5,10 @@
 
 import React from 'react';
 import {
-  Modal, Text, StyleSheet, View, ActivityIndicator,
+  Modal, StyleSheet, View, ActivityIndicator,
 } from 'react-native';
+
+import { appBg } from '../colors';
 
 export interface Props {
   visible: boolean;
@@ -20,7 +22,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   activityIndicatorWrapper: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: appBg,
     height: 100,
     width: 100,
     borderRadius: 10,
