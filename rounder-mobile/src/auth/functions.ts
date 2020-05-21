@@ -9,6 +9,7 @@ interface LoginResultSuccess {
 
 interface LoginResultFail {
   success: false;
+  error: string;
 }
 
 type LoginResult = LoginResultSuccess | LoginResultFail;
@@ -16,17 +17,21 @@ type LoginResult = LoginResultSuccess | LoginResultFail;
 const userNameKey = 'USER_NAME';
 const passwordKey = 'PASSWORD';
 
-export async function login(userName: string, password: string): Promise<LoginResult> {
+export async function login(email: string, password: string): Promise<LoginResult> {
   try {
     const resp = await fetch(`${serviceBase}/auth/login`, {
       method: 'POST',
-      body: JSON.stringify({ email: userName, password }),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
     });
 
-    if (resp.ok) {
-      const json = await resp.json();
+    const json = await resp.json();
 
-      SecureStore.setItemAsync(userNameKey, userName);
+    if (resp.ok) {
+      SecureStore.setItemAsync(userNameKey, email);
       SecureStore.setItemAsync(passwordKey, password);
 
       return {
@@ -35,21 +40,28 @@ export async function login(userName: string, password: string): Promise<LoginRe
       };
     }
 
-    return { success: false };
+    return { success: false, error: json.message };
   } catch (e) {
-    return { success: false };
+    return { success: false, error: e.message };
   }
 }
 
-export async function signup(userName: string, password: string): Promise<LoginResult> {
+export async function signup(email: string, password: string): Promise<LoginResult> {
   try {
     const resp = await fetch(`${serviceBase}/auth/signup`, {
       method: 'POST',
-      body: JSON.stringify({ email: userName, password }),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
     });
 
+    const json = await resp.json();
+
     if (resp.ok) {
-      const json = await resp.json();
+      SecureStore.setItemAsync(userNameKey, email);
+      SecureStore.setItemAsync(passwordKey, password);
 
       return {
         success: true,
@@ -57,9 +69,9 @@ export async function signup(userName: string, password: string): Promise<LoginR
       };
     }
 
-    return { success: false };
+    return { success: false, error: json.message };
   } catch (e) {
-    return { success: false };
+    return { success: false, error: e.message };
   }
 }
 
@@ -68,7 +80,7 @@ export async function checkLogin(): Promise<LoginResult> {
   const password = await SecureStore.getItemAsync(passwordKey);
 
   if (!userName || !password) {
-    return { success: false };
+    return { success: false, error: 'user credentials not stored' };
   }
 
   const result = await login(userName, password);

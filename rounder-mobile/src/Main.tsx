@@ -43,6 +43,7 @@ import Dashboard from './pages/Dashboard';
 
 const Main: React.FC = () => {
   const auth = useContext(AuthContext);
+
   if (auth.loading) {
     return <Loader visible />;
   }
@@ -51,7 +52,7 @@ const Main: React.FC = () => {
     return <LoginOrSignup />;
   }
 
-  return <Dashboard />;
+  return <Dashboard logout={auth.logout} />;
 };
 
 export default Main;

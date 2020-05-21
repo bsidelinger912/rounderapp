@@ -3,7 +3,11 @@
   "private": true,
   "workspaces": [
     "rounder-client",
-    "rounder-types"
+    "rounder-shared",
+    "rounder-mobile"
+  ],
+  "nohoist": [
+    "rounder-mobile/**"
   ],
   "license": "MIT",
   "devDependencies": {

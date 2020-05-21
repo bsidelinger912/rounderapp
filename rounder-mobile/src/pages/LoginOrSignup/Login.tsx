@@ -3,51 +3,73 @@
  * @description main login form for the app
  */
 
-import React from 'react';
+import React, { useContext } from 'react';
+import { validateEmail } from 'rounder-shared';
 
 import {
-  Form, TextField, Validation, Submit,
+  Form, TextField, Validation, Submit, Error,
 } from '../../components/form';
+import Loader from '../../components/Loader';
+import { AuthContext } from '../../auth/AuthProvider';
+import { useLogin } from '../../auth/hooks';
 
 interface Values {
   email: string;
   password: string;
 }
 
-const Login: React.FC = () => (
-  <Form<Values>
-    initialValues={{ email: '', password: '' }}
-    onSubmit={async (values): Promise<void> => {
-      console.log(values);
-    }}
-    validate={(values: Values): Validation<Values> => {
-      const errors: Validation<Values> = {};
+const Login: React.FC = () => {
+  const auth = useContext(AuthContext);
 
-      if (!values.email) {
-        errors.email = 'Required';
-      }
+  const { invoke, loading, error } = useLogin({
+    onSuccess: (token: string) => {
+      if (!auth.loading) auth.setToken(token);
+    },
+  });
 
-      if (!values.password) {
-        errors.password = 'Required';
-      }
+  if (loading) {
+    return <Loader visible />;
+  }
 
-      return errors;
-    }}
-  >
-    <TextField
-      name="email"
-      placeholder="your email is your user ID"
-      label="Email"
-    />
+  return (
+    <Form<Values>
+      initialValues={{ email: '', password: '' }}
+      onSubmit={async (values): Promise<void> => {
+        await invoke(values);
+      }}
+      validate={(values: Values): Validation<Values> => {
+        const errors: Validation<Values> = {};
 
-    <TextField
-      name="password"
-      label="Password"
-      password
-    />
+        if (!values.email) {
+          errors.email = 'Required';
+        } else if (!validateEmail(values.email)) {
+          errors.email = 'Not a valid email';
+        }
 
-    <Submit title="Log In" />
-  </Form>
-);
+        if (!values.password) {
+          errors.password = 'Required';
+        }
+
+        return errors;
+      }}
+    >
+      <TextField
+        name="email"
+        placeholder="your email is your user ID"
+        label="Email"
+      />
+
+      <TextField
+        name="password"
+        label="Password"
+        password
+      />
+
+      <Error message={error} />
+
+      <Submit title="Log In" />
+    </Form>
+  );
+};
 
 export default Login;

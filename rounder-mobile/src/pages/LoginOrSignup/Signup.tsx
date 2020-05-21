@@ -3,11 +3,15 @@
  * @description main login form for the app
  */
 
-import React from 'react';
+import React, { useContext } from 'react';
+import { validateEmail } from 'rounder-shared';
 
 import {
-  Form, TextField, Validation, Submit,
+  Form, TextField, Validation, Submit, Error,
 } from '../../components/form';
+import Loader from '../../components/Loader';
+import { useSignup } from '../../auth/hooks';
+import { AuthContext } from '../../auth/AuthProvider';
 
 interface Values {
   email: string;
@@ -15,50 +19,68 @@ interface Values {
   passwordConfirmation: string;
 }
 
-const Login: React.FC = () => (
-  <Form<Values>
-    initialValues={{ email: '', password: '', passwordConfirmation: '' }}
-    onSubmit={async (values): Promise<void> => {
-      console.log(values);
-    }}
-    validate={(values: Values): Validation<Values> => {
-      const errors: Validation<Values> = {};
+const Signup: React.FC = () => {
+  const auth = useContext(AuthContext);
 
-      if (!values.email) {
-        errors.email = 'Required';
-      }
+  const { invoke, loading, error } = useSignup({
+    onSuccess: (token: string) => {
+      if (!auth.loading) auth.setToken(token);
+    },
+  });
 
-      if (!values.password) {
-        errors.password = 'Required';
-      }
+  if (loading) {
+    return <Loader visible />;
+  }
 
-      if (values.passwordConfirmation !== values.password) {
-        errors.passwordConfirmation = 'Passwords do not match';
-      }
+  return (
+    <Form<Values>
+      initialValues={{ email: '', password: '', passwordConfirmation: '' }}
+      onSubmit={async (values): Promise<void> => {
+        await invoke(values);
+      }}
+      validate={(values: Values): Validation<Values> => {
+        const errors: Validation<Values> = {};
 
-      return errors;
-    }}
-  >
-    <TextField
-      name="email"
-      placeholder="your email is your user ID"
-      label="Email"
-    />
+        if (!values.email) {
+          errors.email = 'Required';
+        } else if (!validateEmail(values.email)) {
+          errors.email = 'Not a valid email';
+        }
 
-    <TextField
-      name="password"
-      label="Password"
-      password
-    />
+        if (!values.password) {
+          errors.password = 'Required';
+        }
 
-    <TextField
-      name="passwordConfirmation"
-      label="Confirm Password"
-      password
-    />
+        if (values.passwordConfirmation !== values.password) {
+          errors.passwordConfirmation = 'Passwords do not match';
+        }
 
-    <Submit title="Sign Up" />
-  </Form>
-);
+        return errors;
+      }}
+    >
+      <TextField
+        name="email"
+        placeholder="your email is your user ID"
+        label="Email"
+      />
 
-export default Login;
+      <TextField
+        name="password"
+        label="Password"
+        password
+      />
+
+      <TextField
+        name="passwordConfirmation"
+        label="Confirm Password"
+        password
+      />
+
+      <Error message={error} />
+
+      <Submit title="Sign Up" />
+    </Form>
+  );
+};
+
+export default Signup;

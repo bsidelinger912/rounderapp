@@ -4,10 +4,28 @@
  */
 
 import React from 'react';
-import { Text } from 'react-native';
+import {
+  Text, StyleSheet, View, Button,
+} from 'react-native';
 
-const Dashboard: React.FC = () => (
-  <Text>Dashboard</Text>
+interface Props {
+  logout(): void;
+}
+
+const styles = StyleSheet.create({
+  main: {
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
+
+const Dashboard: React.FC<Props> = ({ logout }) => (
+  <View style={styles.main}>
+    <Text>Dashboard</Text>
+    <Button onPress={logout} title="Log out" />
+  </View>
 );
 
 export default Dashboard;

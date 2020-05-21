@@ -11,6 +11,7 @@ import {
 import { borderLightGrey } from '../../colors';
 
 import { Context } from './Form';
+import Error from './Error';
 
 export interface Props {
   name: string;
@@ -34,10 +35,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     width: '100%',
   },
-  error: {
-    color: 'red',
-    height: 40,
-  },
 });
 
 const TextField: React.FC<Props> = ({
@@ -58,7 +55,7 @@ const TextField: React.FC<Props> = ({
         secureTextEntry={password}
         style={styles.input}
       />
-      <Text style={styles.error}>{touched[name] && errors[name]}</Text>
+      <Error message={(touched[name] && errors[name]) || undefined} />
     </View>
   );
 };

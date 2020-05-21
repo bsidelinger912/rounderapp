@@ -17,6 +17,7 @@ interface AuthContextDataLoaded {
   loading: false;
   isAuthenticated: boolean;
   getToken(): string;
+  setToken(token: string): void;
   logout(): Promise<void>;
 }
 
@@ -45,6 +46,7 @@ const AuthProvider: React.FC = ({ children }) => {
   const logout = useCallback(async () => {
     token.current = undefined;
     await removePassword();
+    setIsAuthenticated(false);
   }, []);
 
   useEffect(() => {
@@ -58,6 +60,10 @@ const AuthProvider: React.FC = ({ children }) => {
     loading: false,
     isAuthenticated,
     getToken: (): string => token.current || '',
+    setToken: (newToken: string): void => {
+      token.current = newToken;
+      setIsAuthenticated(true);
+    },
   };
 
   return (
