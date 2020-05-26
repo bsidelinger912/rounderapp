@@ -4,7 +4,7 @@ const typeDef = `
   }
 
   extend type Mutation {
-    addTrip(input: Trip!): Trip
+    addTrip(input: TripInput!): Trip
   }
 
   type User {

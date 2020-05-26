@@ -23,6 +23,6 @@
     "typescript": "^3.9.2"
   },
   "scripts": {
-    "dev": "OFFLINE=true sls offline start --migrate"
+    "dev": "OFFLINE=true sls offline start --migrate --useChildProcesses"
   }
 }

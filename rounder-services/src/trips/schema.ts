@@ -10,8 +10,18 @@ const typeDef = `
     wayPoints: [WayPoint]
   }
 
+  input TripInput {
+    name: String!
+    description: String
+    wayPoints: [WayPointInput]
+  }
+
   type WayPoint {
     id: ID!
+    name: String!
+  }
+
+  input WayPointInput {
     name: String!
   }
 `;
