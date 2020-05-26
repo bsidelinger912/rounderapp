@@ -7,6 +7,7 @@ import passport from 'passport';
 import cors from 'cors';
 
 import auth from './src/auth';
+import { apolloServer } from './src/graphql';
 
 const app = express();
 
@@ -15,5 +16,7 @@ app.use(bodyParser.json({ strict: false }));
 app.use(passport.initialize());
 
 app.use('/auth', auth);
+
+apolloServer.applyMiddleware({ app });
 
 export const handler = serverless(app);
